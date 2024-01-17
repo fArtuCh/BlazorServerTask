@@ -1,0 +1,9 @@
+﻿
+.LocalGridForTabs {
+    display: grid;
+    gap: 0em;
+    grid-template-columns: repeat( 5, 1fr);
+    padding-block: 2rem;
+    width: 100%;
+    margin-inline: auto;
+}

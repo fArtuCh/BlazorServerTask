@@ -1,0 +1,33 @@
+﻿@namespace ComponentsLib
+
+@switch (ParamChoosenGroup)
+{
+    case EnumUserGroup.Grupa1:
+        <img src="/images/IconsGroups/IconGroup1.png" />
+        break;
+    case EnumUserGroup.Grupa2:
+        <img src="/images/IconsGroups/IconGroup2.png" />
+        break;
+    case EnumUserGroup.Grupa3:
+        <img src="/images/IconsGroups/IconGroup3.png" />
+        break;
+    case EnumUserGroup.Grupa4:
+        <img src="/images/IconsGroups/IconGroup4.png" />
+        break;
+    case EnumUserGroup.Grupa5:
+        <img src="/images/IconsGroups/IconGroup5.png" />
+        break;
+    default:
+        <img src="/images/IconsGroups/IconGroup0.png" />
+        break;
+}
+
+
+
+
+@code {
+    [Parameter] public EnumUserGroup ParamChoosenGroup { get; set; }
+
+
+
+}

@@ -2,14 +2,11 @@
 @inject IServiceManager ServiceManager
 
 
-<div>
-
-
-
+<div class="LocalGrid p-2">
 
     @foreach (var user in ParamUsers)
     {
-        <div>
+        <div @ondragenter="()=>OnUserDragEnter(user.Id)">
             <UserCard ParamUserId="user.Id" />
         </div>
 
@@ -21,6 +18,14 @@
 @code {
 
     [Parameter] public List<ModelUser> ParamUsers { get; set; } = new();
+
+
+    public void OnUserDragEnter(Guid UserId)
+    {
+        ServiceManager.DragDropLS.CurrentUsersBeingDragged.Clear();
+        ServiceManager.DragDropLS.CurrentUsersBeingDragged.Add(UserId);
+    }
+
 
 
     protected override async Task OnParametersSetAsync()

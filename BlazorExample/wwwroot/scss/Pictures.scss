@@ -1,5 +1,13 @@
 ﻿
 
 img{
-    display:block;
+    display:inline-block;
+}
+
+
+.round-image {
+    width: 4em; /* Assuming 1em = 16px, 6.25em is approximately 100px */
+    height: 4em; /* Adjust the value as needed based on your actual font-size */
+    border-radius: 50%; /* This makes the image round */
+    object-fit: cover; /* This ensures the image covers the area without stretching */
 }

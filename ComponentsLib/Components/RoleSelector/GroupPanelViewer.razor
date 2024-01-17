@@ -1,10 +1,107 @@
 ﻿@namespace ComponentsLib
+@inject IServiceManager ServiceManager
 
-<div class="border border-primary rounded transparent-blur">
-   User role viewer
+<div class="rounded  h-100 transparent-blur">
+
+    <div class="py-2 px-3 LocalGridForTabs">
+
+        @foreach (EnumUserGroup value in Enum.GetValues(typeof(EnumUserGroup)))
+        {
+
+            if (value == EnumUserGroup.None)
+            {
+                continue;
+            }
+
+            <button class="btn btn-secondary"
+                    @ondragenter="()=>OnUserDragEnter(value)"
+                    @onclick="()=>OnClickChangeGroup(value)">
+
+                <span>
+                    <CptIconGroupShower ParamChoosenGroup="value" />
+                </span>
+
+
+                <span>
+                    @value.ToString()
+                </span>
+
+
+            </button>
+        }
+
+
+    </div>
+
+
+
+    <div>
+
+        <LoadingComponent ParamIsLoading="IsLoading">
+            <UserViewer ParamUsers="CurrentUsers" />
+        </LoadingComponent>
+
+    </div>
+
+
+
 </div>
 
 
 @code {
+    private EnumUserGroup CurrentGroupSelected { get; set; } = EnumUserGroup.Grupa1;
+
+    public List<ModelUser> CurrentUsers { get; set; } = new();
+
+
+    public bool IsLoading { get; set; }
+
+    public async Task OnClickChangeGroup(EnumUserGroup enumUserGroup)
+    {
+        CurrentGroupSelected = enumUserGroup;
+        await DownloadUsersForGroup();
+    }
+
+    public async Task DownloadUsersForGroup()
+    {
+        IsLoading = true;
+        StateHasChanged();
+
+        var result = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(CurrentGroupSelected);
+        if (result.IsSuccess)
+        {
+            CurrentUsers = result.Value;
+        }
+        IsLoading = false;
+    }
+
+    public async Task OnUserDragEnter(EnumUserGroup enumUserGroup)
+    {
+        if (ServiceManager.DragDropLS.CurrentUsersBeingDragged.Any())
+        {
+            CurrentGroupSelected = enumUserGroup;
+            await DownloadUsersForGroup();
+        }
+    }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        IsLoading = true;
+        StateHasChanged();
+
+        var result = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(CurrentGroupSelected);
+
+        if (result.IsSuccess)
+        {
+            CurrentUsers = result.Value;
+        }
+
+        IsLoading = false;
+
+    }
+
 
 }

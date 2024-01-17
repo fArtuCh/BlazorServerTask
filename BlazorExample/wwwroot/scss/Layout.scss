@@ -6,12 +6,8 @@
 
 main {
     flex: 1;
-  /*  background: linear-gradient(to left, #C33764, #1D2671);*/
-    background: rgb(128, 128, 128);
-}
-
-.sidebar {
-    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    background: linear-gradient(to left, #C33764, #1D2671);
+/*    background: rgb(128, 128, 128);*/
 }
 
 
@@ -48,13 +44,22 @@ main {
     }
 }
 
+
+
+
+/*MENU*/
+
+.sidebar {
+    @extend .bg-dark;
+}
+
 @media (min-width: 641px) {
     .page {
         flex-direction: row;
     }
 
     .sidebar {
-        width: 250px;
+        width: 50px;
         height: 100vh;
         position: sticky;
         top: 0;
@@ -71,9 +76,6 @@ main {
         padding-right: 1.5rem !important;
     }
 }
-
-
-/*MENU*/
 
 .navbar-toggler {
     background-color: rgba(255, 255, 255, 0.1);

@@ -1,0 +1,24 @@
+﻿
+.scrollable-div {
+    max-height: 400px; 
+    overflow-y: auto; 
+}
+
+.rounded-badges {
+    list-style-type: none; 
+    padding: 0; 
+}
+
+    .rounded-badges li {
+        background-color: rgba(0, 123, 255, 0.5); 
+        color: white;
+        padding: 0.5em 1em;
+        margin-bottom: 10px;
+        border-radius: 50px;
+        display: inline-block;
+        width: calc(100% - 2em);
+    }
+
+        .rounded-badges li:nth-child(2n) {
+            background-color: rgba(0, 86, 179, 0.5);
+        }

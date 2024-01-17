@@ -1,0 +1,10 @@
+﻿
+.LocalGrid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(100px,2fr));
+    padding-block: 2rem;
+    width: 100%;
+    margin-inline: auto;
+    
+}

@@ -1,18 +1,22 @@
 ﻿@namespace ComponentsLib
 @inject IServiceManager ServiceManager
 
-<div class="border border-danger rounded transparent-blur">
+<div class=" rounded h-100 transparent-blur">
 
-    <div>
-        <span>Użytkownicy</span>
-
+    <div class="d-flex justify-content-between px-2 pt-2 mb-5">
+        <span class="fw-bold text-white">Użytkownicy</span>
+        <span></span>
         <span class="text-end">:</span>
 
     </div>
 
-    <UserViewer ParamUsers="Users" />
+    <div class="p-3">
+        <UserViewer ParamUsers="Users" />
+    </div>
 
-    <hr/>
+
+
+ 
 
     <ActionViewer/>
 

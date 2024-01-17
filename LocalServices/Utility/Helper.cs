@@ -17,9 +17,9 @@ public static class Helper
         {
             var users = new List<ModelUser>
         {
-            new ModelUser { Id = Guid.NewGuid() , Name = "Adam", Surname = "Kowalski", Location = "Radom", ProfilePictureLocation = "/images/User1.png", UserGroup = EnumUserGroup.None },
+            new ModelUser { Id = Guid.NewGuid() , Name = "Adam", Surname = "Kowalski", Location = "Radom", ProfilePictureLocation = "/images/User3.png", UserGroup = EnumUserGroup.None },
             new ModelUser {Id = Guid.NewGuid() , Name = "Piotr", Surname = "Piotrowski", Location = "Radom", ProfilePictureLocation = "/images/User2.png", UserGroup = EnumUserGroup.None },
-            new ModelUser {Id = Guid.NewGuid() , Name = "Magda", Surname = "Nowakowska", Location = "Warszawa", ProfilePictureLocation = "/images/User3.png", UserGroup = EnumUserGroup.None },
+            new ModelUser {Id = Guid.NewGuid() , Name = "Magda", Surname = "Nowakowska", Location = "Warszawa", ProfilePictureLocation = "/images/User1.png", UserGroup = EnumUserGroup.None },
             new ModelUser { Id = Guid.NewGuid() ,Name = "Jan", Surname = "Nowak", Location = "Radom", ProfilePictureLocation = "/images/User4.png", UserGroup = EnumUserGroup.Grupa1 },
         };
 

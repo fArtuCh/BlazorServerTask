@@ -1,22 +1,30 @@
 ﻿@namespace ComponentsLib
 @inject IServiceManager ServiceManager
 
-<div class="bg-white rounded-1 text-center" style="max-width:200px">
+<div class="bg-white rounded-1 text-center" style="max-width:200px; cursor: grab; line-height:1">
     @if (ModelUser is not null)
     {
-        <div>
-            <img src="@ModelUser.ProfilePictureLocation"/>
+
+        <div style="position:absolute"> 
+            <CptIconGroupShower ParamChoosenGroup="ModelUser.UserGroup"/>
         </div>
 
-        <div>
-            @ModelUser.Name
-        </div>
 
-        <div>
-            @ModelUser.Surname
-        </div>
+        <div class="px-4 pt-3 pb-1">
+            <div>
+                <img class="round-image" src="@ModelUser.ProfilePictureLocation" />
+            </div>
 
-        <div class="bg-dark text-white">
+            <div>
+                @ModelUser.Name
+            </div>
+
+            <div>
+                @ModelUser.Surname
+            </div>
+
+        </div>
+        <div class="bg-dark text-white p-2">
             @ModelUser.Location
         </div>
 

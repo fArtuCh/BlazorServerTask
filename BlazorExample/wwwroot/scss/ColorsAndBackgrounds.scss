@@ -7,7 +7,8 @@
 
 
 .transparent-blur {
-    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
-    backdrop-filter: blur(10px); /* Blurring the content behind the element */
-    border: 1px solid rgba(255, 255, 255, 0.3); /* Optional: Adding a light border */
+    background-image: radial-gradient(at top left, rgba(255, 255, 255, 0.5),  rgba(182, 255, 0,0));
+    //background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); 
+    //border: 1px solid rgba(255, 255, 255, 0.3); 
 }
