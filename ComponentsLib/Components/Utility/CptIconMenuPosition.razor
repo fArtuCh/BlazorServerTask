@@ -1,0 +1,29 @@
+﻿@namespace ComponentsLib
+
+
+
+<div class="rounded p-2 @SelectionStyle text-center">
+
+    <div class="icon">
+        <img src="@ParamIconPath" />
+    </div>
+
+    <div class="Menutext @TextColor" style="font-size:8px">
+        @ParamIconText
+    </div>
+
+</div>
+
+
+
+@code {
+    [Parameter] public bool ParamIsSelected { get; set; }
+
+    [Parameter] public string ParamIconText { get; set; } = string.Empty;
+
+    [Parameter] public string ParamIconPath { get; set; } = string.Empty;
+
+    private string SelectionStyle => ParamIsSelected ? "bg-white":  "";
+
+    private string TextColor => ParamIsSelected ? "text-black" : "text-white";
+}

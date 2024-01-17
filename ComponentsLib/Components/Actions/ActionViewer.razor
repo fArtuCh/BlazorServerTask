@@ -1,34 +1,21 @@
 ﻿@namespace ComponentsLib
+@inject ICourier _courier
+@implements IDisposable
 
 
-
-<div class="mx-2 text-white my-2" style="border-top:2px solid; opacity:0.6"></div>
+<div class="mx-2 text-white my-2 mb-4" style="border-top:2px solid; opacity:0.6"></div>
 
 <div class="scrollable-div">
     <ul class="rounded-badges mx-2">
-        <li>List Item 1</li>
-        <li>List Item 2</li>
-        <li>List Item 3</li>
-        <li>List Item 4</li>
-        <li>List Item 5</li>
-
-        <li>List Item 3</li>
-        <li>List Item 4</li>
-        <li>List Item 5</li>
-
-        <li>List Item 3</li>
-        <li>List Item 4</li>
-        <li>List Item 5</li>
-
-
-        <li>List Item 3</li>
-        <li>List Item 4</li>
-        <li>List Item 5</li>
-
-
-        <li>List Item 3</li>
-        <li>List Item 4</li>
-        <li>List Item 5</li>
+        @foreach (var message in ActionMessages)
+        {
+            var ExtraEffect = message.IsNowAdded ? "NewlyAdded" : "" ;
+            message.IsNowAdded = false;
+            <li class="@ExtraEffect">
+                <CptIconGroupShower ParamChoosenGroup="message.enumUserGroup" />
+                <span>@message.Message</span>
+            </li>
+        }
 
     </ul>
 
@@ -37,5 +24,84 @@
 
 
 @code {
+
+
+    private List<ActionMessage> ActionMessages { get; set; } = new();
+
+    private sealed class ActionMessage
+    {
+        public EnumUserGroup enumUserGroup { get; set; }
+
+        public string Message { get; set; } = string.Empty;
+
+        public bool IsNowAdded { get; set; } = false;
+
+    }
+
+
+    private ActionMessage ChangeUserModelIntoAction(ModelUser modelUser)
+    {
+        return new ActionMessage()
+            {
+                enumUserGroup = modelUser.UserGroup,
+                Message = $"Użytkownik {modelUser.Name} {modelUser.Surname} został przeniesiony do grupy {modelUser.UserGroup.GetDescription()} ",
+            };
+    }
+
+    private void InitExampleActionMessages()
+    {
+        var generatedUser = Helper.User.GenerateUsers();
+        foreach (var item in generatedUser)
+        {
+            ActionMessages.Add(ChangeUserModelIntoAction(item));
+        }
+
+    }
+
+    private async Task HandleUserGroupChange(NotificationGroupChange notify, CancellationToken cancellationToken)
+    {
+        if (notify.PreviousGroup != EnumUserGroup.None)
+        {
+
+            ActionMessage actionMessage2 = new ActionMessage()
+                {
+                    enumUserGroup = notify.PreviousGroup,
+                    Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został usunięty z grupy {notify.PreviousGroup} ",
+                    IsNowAdded = true,
+                };
+
+            ActionMessages.Add(actionMessage2);
+        }
+
+        if (notify.Data.UserGroup !=  EnumUserGroup.None)
+        {
+            ActionMessage actionMessage = new ActionMessage()
+                {
+                    enumUserGroup = notify.Data.UserGroup,
+                    Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został przeniesiony do grupy {notify.Data.UserGroup.GetDescription()} ",
+                    IsNowAdded = true,
+                };
+
+            ActionMessages.Add(actionMessage);
+        }
+
+        
+        await InvokeAsync(StateHasChanged);
+
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _courier.Subscribe<NotificationGroupChange>(HandleUserGroupChange);
+
+        InitExampleActionMessages();
+    }
+
+    public void Dispose()
+    {
+        _courier.UnSubscribe<NotificationGroupChange>(HandleUserGroupChange);
+    }
+
 
 }

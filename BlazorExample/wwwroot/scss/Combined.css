@@ -8111,7 +8111,7 @@ textarea.form-control-lg {
   background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;
 }
 
-.bg-dark, .sidebar {
+.bg-dark {
   --bs-bg-opacity: 1;
   background-color: rgba(var(--bs-dark-rgb), var(--bs-bg-opacity)) !important;
 }
@@ -10792,43 +10792,17 @@ main {
   /*    background: rgb(128, 128, 128);*/
 }
 
-.top-row {
-  background-color: #f7f7f7;
-  border-bottom: 1px solid #d6d5d5;
-  justify-content: flex-end;
-  height: 3.5rem;
-  display: flex;
-  align-items: center;
-}
-
-.top-row ::deep a, .top-row .btn-link {
-  white-space: nowrap;
-  margin-left: 1.5rem;
-}
-
-.top-row a:first-child {
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-@media (max-width: 640.98px) {
-  .top-row:not(.auth) {
-    display: none;
-  }
-  .top-row.auth {
-    justify-content: space-between;
-  }
-  .top-row a, .top-row .btn-link {
-    margin-left: 0;
-  }
-}
 /*MENU*/
+.sidebar {
+  background-color: #32293F;
+}
+
 @media (min-width: 641px) {
   .page {
     flex-direction: row;
   }
   .sidebar {
-    width: 50px;
+    width: 80px;
     height: 100vh;
     position: sticky;
     top: 0;

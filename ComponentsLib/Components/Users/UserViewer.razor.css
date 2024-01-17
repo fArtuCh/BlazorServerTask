@@ -8,3 +8,11 @@
     margin-inline: auto;
     
 }
+
+.grid-item {
+   /* background-color: #f0f0f0; */
+}
+
+    .grid-item:nth-child(2n) {
+        background-color: #b0c4de; 
+    }

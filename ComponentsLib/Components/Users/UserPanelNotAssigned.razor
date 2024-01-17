@@ -1,7 +1,9 @@
 ﻿@namespace ComponentsLib
+@implements IDisposable
+@inject ICourier _courier
 @inject IServiceManager ServiceManager
 
-<div class=" rounded h-100 transparent-blur">
+<div class=" rounded h-100 transparent-blur d-flex" style="flex-direction:column">
 
     <div class="d-flex justify-content-between px-2 pt-2 mb-5">
         <span class="fw-bold text-white">Użytkownicy</span>
@@ -10,15 +12,14 @@
 
     </div>
 
-    <div class="p-3">
-        <UserViewer ParamUsers="Users" />
+    <div class="p-3" style="flex-grow:1">
+        <UserViewer ParamUsers="Users" ParamUserGroupType="EnumUserGroup.None" />
     </div>
 
+    <div>
+        <ActionViewer />
+    </div>
 
-
- 
-
-    <ActionViewer/>
 
 </div>
 
@@ -29,13 +30,40 @@
 
     protected override async Task OnParametersSetAsync()
     {
-
         var GetUsersResult = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(EnumUserGroup.None);
 
         if (GetUsersResult.IsSuccess)
         {
             Users = GetUsersResult.Value;
         }
+    }
+
+
+    private async Task HandleUserGroupChange(NotificationGroupChange notify, CancellationToken cancellationToken)
+    {
+        if (notify.PreviousGroup == EnumUserGroup.None)
+        {
+            Users.RemoveAll(n => n.Id == notify.Data.Id);
+            await InvokeAsync(StateHasChanged);
+        }
+        else if (notify.Data.UserGroup == EnumUserGroup.None)
+        {
+            Users.Add(notify.Data);
+            await InvokeAsync(StateHasChanged);
+        }
 
     }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _courier.Subscribe<NotificationGroupChange>(HandleUserGroupChange);
+    }
+
+    public void Dispose()
+    {
+        _courier.UnSubscribe<NotificationGroupChange>(HandleUserGroupChange);
+    }
+
+
 }

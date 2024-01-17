@@ -1,8 +1,8 @@
 ﻿@namespace ComponentsLib
 
-<div class="top-row ps-3 navbar navbar-dark">
+<div class="navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand text-white" href="">Icon</a>
+        <CptIconMenuPosition ParamIconPath="/images/MenuIcons/LogoIcon.svg" ParamIsSelected="true" ParamIconText="" />
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -11,14 +11,16 @@
 
 <div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
     <nav class="flex-column">
-        <div class="nav-item px-3">
+        <div class="nav-item ">
             <NavLink class="nav-link" href="@DomainUrls.UnLogged.Home" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Zakładka1
+                <CptIconMenuPosition ParamIconPath="/images/MenuIcons/StarIcon.svg"  ParamIsSelected="true" ParamIconText="Zakładka1" />
             </NavLink>
+
         </div>
-        <div class="nav-item px-3">
+
+        <div class="nav-item " >
             <NavLink class="nav-link" href="@DomainUrls.UnLogged.SecondPage">
-                <span class="oi oi-plus" aria-hidden="true"></span> Zakładka2
+                <CptIconMenuPosition ParamIconPath="/images/MenuIcons/StarIcon.svg" ParamIsSelected="false" ParamIconText="Zakładka1" />
             </NavLink>
         </div>
     </nav>

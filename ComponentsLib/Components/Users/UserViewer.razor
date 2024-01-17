@@ -2,15 +2,22 @@
 @inject IServiceManager ServiceManager
 
 
-<div class="LocalGrid p-2">
+<div class="LocalGrid p-2 " @ondragend="()=>OnDragEnd()" @ondragenter="()=>OnPanelEnter()" @ondragleave="OnPanelLeave">
 
     @foreach (var user in ParamUsers)
     {
-        <div @ondragenter="()=>OnUserDragEnter(user.Id)">
+        <div class="grid-item " @ondragstart="()=>OnUserDragStart(user.Id)">
             <UserCard ParamUserId="user.Id" />
         </div>
 
     }
+
+@*     @if (ParamUsers.Count ==0)
+    {
+        <div class="grid-item w-100 ">
+
+        </div>
+    } *@
 
 </div>
 
@@ -19,8 +26,34 @@
 
     [Parameter] public List<ModelUser> ParamUsers { get; set; } = new();
 
+    [Parameter] public EnumUserGroup ParamUserGroupType { get; set; } = EnumUserGroup.Grupa1;
 
-    public void OnUserDragEnter(Guid UserId)
+
+    public async void OnDragEnd()
+    {
+        var draggedUsers = ServiceManager.DragDropLS.CurrentUsersBeingDragged;
+
+        var CurrentGroup = ServiceManager.DragDropLS.LastDragedPannel;
+
+    foreach (var userId in draggedUsers)
+        {
+            await ServiceManager.UserServiceLS.MoveUserToGivenGroup(userId, CurrentGroup);
+        }
+
+    }
+
+    public void OnPanelEnter()
+    {
+        ServiceManager.DragDropLS.LastDragedPannel = ParamUserGroupType;
+    }
+
+    public void OnPanelLeave()
+    {
+      //  ServiceManager.DragDropLS.LastDragedPannel = null ;
+    }
+
+
+    public void OnUserDragStart(Guid UserId)
     {
         ServiceManager.DragDropLS.CurrentUsersBeingDragged.Clear();
         ServiceManager.DragDropLS.CurrentUsersBeingDragged.Add(UserId);
@@ -28,17 +61,4 @@
 
 
 
-    protected override async Task OnParametersSetAsync()
-    {
-
-
-        // var GetUsersResult = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(EnumUserGroup.None);
-
-        // if (GetUsersResult.IsSuccess)
-        // {
-        //     Users = GetUsersResult.Value;
-        // }
-
-
-    }
 }

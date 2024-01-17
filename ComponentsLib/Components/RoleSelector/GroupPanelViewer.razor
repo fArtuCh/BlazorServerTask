@@ -1,7 +1,11 @@
 ﻿@namespace ComponentsLib
+@implements IDisposable
+@inject ICourier _courier
 @inject IServiceManager ServiceManager
 
-<div class="rounded  h-100 transparent-blur">
+
+
+<div class="rounded  h-100 transparent-blur d-flex" style="flex-direction:column">
 
     <div class="py-2 px-3 LocalGridForTabs">
 
@@ -12,33 +16,31 @@
             {
                 continue;
             }
+            <div>
+                <button class="btn btn-light w-100 @GroupSelectedButtonStyle(value)"
+                        @ondragenter="()=>OnUserDragEnter(value)"
+                        @ondragend="()=>OnUserDragEnter(value)"
+                        @onclick="()=>OnClickChangeGroup(value)">
 
-            <button class="btn btn-secondary"
-                    @ondragenter="()=>OnUserDragEnter(value)"
-                    @onclick="()=>OnClickChangeGroup(value)">
-
-                <span>
-                    <CptIconGroupShower ParamChoosenGroup="value" />
-                </span>
-
-
-                <span>
-                    @value.ToString()
-                </span>
+                    <span>
+                        <CptIconGroupShower ParamChoosenGroup="value" />
+                    </span>
 
 
-            </button>
+                    <span>
+                        @value.ToString()
+                    </span>
+
+
+                </button>
+            </div>
         }
 
-
     </div>
-
-
-
-    <div>
+    <div class="d-flex" style="flex-grow:1">
 
         <LoadingComponent ParamIsLoading="IsLoading">
-            <UserViewer ParamUsers="CurrentUsers" />
+            <UserViewer ParamUsers="CurrentUsers" ParamUserGroupType="@CurrentGroupSelected" />
         </LoadingComponent>
 
     </div>
@@ -53,6 +55,8 @@
 
     public List<ModelUser> CurrentUsers { get; set; } = new();
 
+
+    private string GroupSelectedButtonStyle(EnumUserGroup enumUserGroup) => enumUserGroup == CurrentGroupSelected ? "py-3" : "";
 
     public bool IsLoading { get; set; }
 
@@ -83,6 +87,21 @@
             await DownloadUsersForGroup();
         }
     }
+    public async Task OnUserDragEnd(EnumUserGroup enumUserGroup)
+    {
+        if (ServiceManager.DragDropLS.CurrentUsersBeingDragged.Any())
+        {
+            foreach (var user in ServiceManager.DragDropLS.CurrentUsersBeingDragged)
+            {
+               await ServiceManager.UserServiceLS.MoveUserToGivenGroup(user, enumUserGroup);
+            }
+
+            ServiceManager.DragDropLS.CurrentUsersBeingDragged.Clear();
+
+            CurrentGroupSelected = enumUserGroup;
+            await DownloadUsersForGroup();
+        }
+    }
 
 
 
@@ -101,6 +120,32 @@
 
         IsLoading = false;
 
+    }
+
+    private async Task HandleUserGroupChange(NotificationGroupChange notify, CancellationToken cancellationToken)
+    {
+        if (notify.PreviousGroup == CurrentGroupSelected)
+        {
+            CurrentUsers.RemoveAll(n => n.Id == notify.Data.Id);
+            await InvokeAsync(StateHasChanged);
+        }
+        else if (notify.Data.UserGroup == CurrentGroupSelected)
+        {
+            CurrentUsers.Add(notify.Data);
+            await InvokeAsync(StateHasChanged);
+        }
+
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _courier.Subscribe<NotificationGroupChange>(HandleUserGroupChange);
+    }
+
+    public void Dispose()
+    {
+        _courier.UnSubscribe<NotificationGroupChange>(HandleUserGroupChange);
     }
 
 
