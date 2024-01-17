@@ -1,5 +1,5 @@
 ﻿namespace LocalServices;
 
-public class DragAndDropService
+public class DragAndDropService :IDragAndDropService
 {
 }

@@ -16,10 +16,6 @@
     <ProjectReference Include="..\LocalServices\LocalServices.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Components\" />
-  </ItemGroup>
-
 
 
 </Project>

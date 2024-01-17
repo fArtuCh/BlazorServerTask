@@ -1,0 +1,39 @@
+﻿@namespace ComponentsLib
+@inject IServiceManager ServiceManager
+
+
+<div>
+
+
+
+
+    @foreach (var user in ParamUsers)
+    {
+        <div>
+            <UserCard ParamUserId="user.Id" />
+        </div>
+
+    }
+
+</div>
+
+
+@code {
+
+    [Parameter] public List<ModelUser> ParamUsers { get; set; } = new();
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+
+        // var GetUsersResult = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(EnumUserGroup.None);
+
+        // if (GetUsersResult.IsSuccess)
+        // {
+        //     Users = GetUsersResult.Value;
+        // }
+
+
+    }
+}

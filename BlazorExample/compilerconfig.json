@@ -1,0 +1,12 @@
+﻿[
+  {
+    "outputFile": "wwwroot/css/Combined.css",
+    "inputFile": "wwwroot/css/Combined.scss"
+  },
+
+  {
+    "outputFile": "wwwroot/scss/Combined.css",
+    "inputFile": "wwwroot/scss/Combined.scss"
+  }
+
+]

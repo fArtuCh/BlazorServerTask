@@ -1,0 +1,64 @@
+﻿@namespace ComponentsLib
+@inject IServiceManager ServiceManager
+
+<div class="bg-white rounded-1 text-center" style="max-width:200px">
+    @if (ModelUser is not null)
+    {
+        <div>
+            <img src="@ModelUser.ProfilePictureLocation"/>
+        </div>
+
+        <div>
+            @ModelUser.Name
+        </div>
+
+        <div>
+            @ModelUser.Surname
+        </div>
+
+        <div class="bg-dark text-white">
+            @ModelUser.Location
+        </div>
+
+    }
+    else
+    {
+        <div>
+            Nie można wczytać użytkownika!
+        </div>
+    }
+
+</div>
+
+
+
+@code {
+    [Parameter][EditorRequired] public Guid ParamUserId { get; set; }
+    private Guid UserId { get; set; } = Guid.Empty;
+
+
+    public ModelUser? ModelUser { get; set; }
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (ParamUserId != UserId)
+        {
+            UserId = ParamUserId;
+
+            if (UserId != Guid.Empty)
+            {
+                var GetUserResult = await ServiceManager.UserServiceLS.GetSingleUserById(UserId);
+
+                if (GetUserResult.IsSuccess && GetUserResult.Value is not null)
+                {
+                    ModelUser = GetUserResult.Value;
+                }
+
+            }
+
+        }
+
+
+    }
+}

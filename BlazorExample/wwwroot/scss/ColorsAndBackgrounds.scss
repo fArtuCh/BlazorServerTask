@@ -1,0 +1,13 @@
+﻿
+:root {
+/*    --color1: #C33764;
+    --color2: #1D2671;*/
+}
+
+
+
+.transparent-blur {
+    background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+    backdrop-filter: blur(10px); /* Blurring the content behind the element */
+    border: 1px solid rgba(255, 255, 255, 0.3); /* Optional: Adding a light border */
+}

@@ -1,0 +1,37 @@
+﻿@namespace ComponentsLib
+@inject IServiceManager ServiceManager
+
+<div class="border border-danger rounded transparent-blur">
+
+    <div>
+        <span>Użytkownicy</span>
+
+        <span class="text-end">:</span>
+
+    </div>
+
+    <UserViewer ParamUsers="Users" />
+
+    <hr/>
+
+    <ActionViewer/>
+
+</div>
+
+
+@code {
+    public List<ModelUser> Users { get; set; } = new();
+
+
+    protected override async Task OnParametersSetAsync()
+    {
+
+        var GetUsersResult = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(EnumUserGroup.None);
+
+        if (GetUsersResult.IsSuccess)
+        {
+            Users = GetUsersResult.Value;
+        }
+
+    }
+}
