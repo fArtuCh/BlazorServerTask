@@ -7,3 +7,29 @@
     width: 100%;
     margin-inline: auto;
 }
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0);
+        min-height: 40px; /* Initial height of the button */
+    }
+
+    50% {
+        transform: translateY(0px);
+        min-height: 80px; /* Height of the button during the bounce */
+    }
+
+    100% {
+        transform: translateY(0px);
+        min-height: 60px; /* Height of the button during the bounce */
+    }
+}
+
+.ButtonMenu {
+    min-height: 40px;
+}
+
+.ButtonMenuActive {
+    min-height: 60px;
+    animation: bounce 1s ease; /* Apply the bounce animation */
+}

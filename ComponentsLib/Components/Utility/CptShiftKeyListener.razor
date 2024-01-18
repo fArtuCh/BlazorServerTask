@@ -1,0 +1,45 @@
+﻿@namespace ComponentsLib
+
+@inject IServiceManager ServiceManager
+@inject IJSRuntime JSRuntime
+@implements IDisposable
+
+
+
+@code {
+
+    private DotNetObjectReference<CptShiftKeyListener>? objRef;
+    private bool isShiftKeyPressed;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            objRef = DotNetObjectReference.Create(this);
+            await JSRuntime.InvokeVoidAsync("keyPressFunctions.listenForShift", objRef);
+        }
+    }
+
+    [JSInvokable]
+    public void OnShiftKeyPress(bool isPressed)
+    {
+        isShiftKeyPressed = isPressed;
+
+        if (isShiftKeyPressed)
+        {
+            ServiceManager.UserServiceLS.EnableSelection();
+        }
+        else
+        {
+            ServiceManager.UserServiceLS.ClearUserSelection();
+        }
+
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        JSRuntime.InvokeVoidAsync("keyPressFunctions.dispose");
+        objRef?.Dispose();
+    }
+}

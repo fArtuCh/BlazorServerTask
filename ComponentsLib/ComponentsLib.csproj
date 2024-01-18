@@ -10,13 +10,17 @@
   <ItemGroup>
     <None Remove="Components\Actions\ActionViewer.razor.css" />
     <None Remove="Components\RoleSelector\GroupPanelViewer.razor.css" />
+    <None Remove="Components\Users\UserCard.razor.css" />
     <None Remove="Components\Users\UserViewer.razor.css" />
+    <None Remove="Components\Utility\CptIconGroupShower.razor.css" />
   </ItemGroup>
 
   <ItemGroup>
     <Content Include="Components\Actions\ActionViewer.razor.css" />
     <Content Include="Components\RoleSelector\GroupPanelViewer.razor.css" />
+    <Content Include="Components\Users\UserCard.razor.css" />
     <Content Include="Components\Users\UserViewer.razor.css" />
+    <Content Include="Components\Utility\CptIconGroupShower.razor.css" />
   </ItemGroup>
 
   <ItemGroup>

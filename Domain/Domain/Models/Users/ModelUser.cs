@@ -11,6 +11,7 @@ public sealed class ModelUser
 
     public string ProfilePictureLocation { get; set; } = string.Empty;
 
+    public bool IsPositionLocked { get; set; }
     public EnumUserGroup UserGroup { get; set; } =  EnumUserGroup.None;
     
 }

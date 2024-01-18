@@ -1,22 +1,27 @@
 ﻿@namespace ComponentsLib
 @inject IServiceManager ServiceManager
-
+@implements IDisposable
+@inject ICourier _courier
 
 <div class="LocalGrid p-2 " @ondragend="()=>OnDragEnd()" @ondragenter="()=>OnPanelEnter()" @ondragleave="OnPanelLeave">
 
     @foreach (var user in ParamUsers)
     {
-        <div class="grid-item " @ondragstart="()=>OnUserDragStart(user.Id)">
+        var selectedUsers = ServiceManager.UserServiceLS.GetSelectedUsers().Value;
+
+        string UserSelectionClass = selectedUsers.Contains(user.Id) ? "grid-item-selected" : "";
+
+        <div class="grid-item @UserSelectionClass" @ondragstart="()=>OnUserDragStart(user.Id)" @onclick="()=>OnClickUserSelection(user.Id)">
             <UserCard ParamUserId="user.Id" />
         </div>
 
     }
 
-@*     @if (ParamUsers.Count ==0)
+    @*     @if (ParamUsers.Count ==0)
     {
-        <div class="grid-item w-100 ">
+    <div class="grid-item w-100 ">
 
-        </div>
+    </div>
     } *@
 
 </div>
@@ -35,7 +40,7 @@
 
         var CurrentGroup = ServiceManager.DragDropLS.LastDragedPannel;
 
-    foreach (var userId in draggedUsers)
+        foreach (var userId in draggedUsers)
         {
             await ServiceManager.UserServiceLS.MoveUserToGivenGroup(userId, CurrentGroup);
         }
@@ -49,7 +54,13 @@
 
     public void OnPanelLeave()
     {
-      //  ServiceManager.DragDropLS.LastDragedPannel = null ;
+        //  ServiceManager.DragDropLS.LastDragedPannel = null ;
+    }
+
+    public void OnClickUserSelection(Guid UserId)
+    {
+        ServiceManager.UserServiceLS.SelectUser(UserId);
+
     }
 
 
@@ -58,6 +69,24 @@
         ServiceManager.DragDropLS.CurrentUsersBeingDragged.Clear();
         ServiceManager.DragDropLS.CurrentUsersBeingDragged.Add(UserId);
     }
+
+
+    private async Task HandleUserGroupChange(NotificationShiftKeyRealeased notify, CancellationToken cancellationToken)
+    {
+        await InvokeAsync(StateHasChanged);
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _courier.Subscribe<NotificationShiftKeyRealeased>(HandleUserGroupChange);
+    }
+
+    public void Dispose()
+    {
+        _courier.UnSubscribe<NotificationShiftKeyRealeased>(HandleUserGroupChange);
+    }
+
 
 
 

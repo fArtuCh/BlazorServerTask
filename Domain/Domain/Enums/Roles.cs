@@ -21,12 +21,12 @@ public enum EnumUserGroup
 
 public static class EnumUserGroupSettings
 {
-    internal const string None = "None";
-    internal const string Grupa1 = "Grupa1";
-    internal const string Grupa2 = "Grupa2";
-    internal const string Grupa3 = "Grupa3";
-    internal const string Grupa4 = "Grupa4";
-    internal const string Grupa5 = "Grupa5";
+    internal const string None = "Grupa 0";
+    internal const string Grupa1 = "Grupa 1";
+    internal const string Grupa2 = "Grupa 2";
+    internal const string Grupa3 = "Grupa 3";
+    internal const string Grupa4 = "Grupa 4";
+    internal const string Grupa5 = "Grupa 5";
 }
 
 public static class EnumConverters

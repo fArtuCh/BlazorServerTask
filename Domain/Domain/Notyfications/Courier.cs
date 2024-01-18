@@ -3,7 +3,8 @@
 namespace Domain;
 
 public class Courier : ICourier,
-    INotificationHandler<NotificationGroupChange>
+    INotificationHandler<NotificationGroupChange>,
+    INotificationHandler<NotificationShiftKeyRealeased>
 {
     private readonly Dictionary<Type, List<Delegate>> handlers = new();
 
@@ -42,6 +43,9 @@ public class Courier : ICourier,
 
     public Task Handle(NotificationGroupChange notification, CancellationToken cancellationToken)
          => HandleNotification(typeof(NotificationGroupChange), notification, cancellationToken);
+
+    public Task Handle(NotificationShiftKeyRealeased notification, CancellationToken cancellationToken)
+     => HandleNotification(typeof(NotificationShiftKeyRealeased), notification, cancellationToken);
 
 
     public Task Publish(INotification notification)

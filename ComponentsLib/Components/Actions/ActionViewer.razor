@@ -12,7 +12,7 @@
             var ExtraEffect = message.IsNowAdded ? "NewlyAdded" : "" ;
             message.IsNowAdded = false;
             <li class="@ExtraEffect">
-                <CptIconGroupShower ParamChoosenGroup="message.enumUserGroup" />
+                <CptIconGroupShower ParamChoosenGroup="message.enumUserGroup" ParamIsWhiteColor="true" />
                 <span>@message.Message</span>
             </li>
         }
@@ -44,7 +44,7 @@
         return new ActionMessage()
             {
                 enumUserGroup = modelUser.UserGroup,
-                Message = $"Użytkownik {modelUser.Name} {modelUser.Surname} został przeniesiony do grupy {modelUser.UserGroup.GetDescription()} ",
+                Message = $"Użytkownik {modelUser.Name} {modelUser.Surname} został przeniesiony do  {modelUser.UserGroup.GetDescription()} ",
             };
     }
 
@@ -66,7 +66,7 @@
             ActionMessage actionMessage2 = new ActionMessage()
                 {
                     enumUserGroup = notify.PreviousGroup,
-                    Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został usunięty z grupy {notify.PreviousGroup} ",
+                    Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został usunięty z  {notify.PreviousGroup} ",
                     IsNowAdded = true,
                 };
 
@@ -78,7 +78,7 @@
             ActionMessage actionMessage = new ActionMessage()
                 {
                     enumUserGroup = notify.Data.UserGroup,
-                    Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został przeniesiony do grupy {notify.Data.UserGroup.GetDescription()} ",
+                    Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został przeniesiony do {notify.Data.UserGroup.GetDescription()} ",
                     IsNowAdded = true,
                 };
 

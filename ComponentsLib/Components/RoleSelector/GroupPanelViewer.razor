@@ -17,9 +17,9 @@
                 continue;
             }
             <div>
-                <button class="btn btn-light w-100 @GroupSelectedButtonStyle(value)"
+                <button class="btn btn-light w-100 ButtonMenu @GroupSelectedButtonStyle(value)"
                         @ondragenter="()=>OnUserDragEnter(value)"
-                        @ondragend="()=>OnUserDragEnter(value)"
+                        @ondragend="()=>OnUserDragEnd(value)"
                         @onclick="()=>OnClickChangeGroup(value)">
 
                     <span>
@@ -56,7 +56,7 @@
     public List<ModelUser> CurrentUsers { get; set; } = new();
 
 
-    private string GroupSelectedButtonStyle(EnumUserGroup enumUserGroup) => enumUserGroup == CurrentGroupSelected ? "py-3" : "";
+    private string GroupSelectedButtonStyle(EnumUserGroup enumUserGroup) => enumUserGroup == CurrentGroupSelected ? "ButtonMenuActive" : "";
 
     public bool IsLoading { get; set; }
 
@@ -83,10 +83,16 @@
     {
         if (ServiceManager.DragDropLS.CurrentUsersBeingDragged.Any())
         {
-            CurrentGroupSelected = enumUserGroup;
-            await DownloadUsersForGroup();
+            if (enumUserGroup != CurrentGroupSelected)
+            {
+                ServiceManager.DragDropLS.LastDragedPannel = enumUserGroup;
+                CurrentGroupSelected = enumUserGroup;
+                await DownloadUsersForGroup();
+            }
         }
     }
+
+
     public async Task OnUserDragEnd(EnumUserGroup enumUserGroup)
     {
         if (ServiceManager.DragDropLS.CurrentUsersBeingDragged.Any())

@@ -1,0 +1,43 @@
+﻿
+
+
+
+.UserCardStyle {
+    max-width: 200px;
+    cursor: grab;
+    line-height: 20px;
+    font-size: 14px;
+    font-family: Verdana;
+    font-weight: 400;
+    color: #3A4449;
+    /*user-select: all;*/
+    background-color: white;
+}
+
+.grid-item-selected .UserCardStyle {
+    background-color: #fbf499;
+}
+
+.BottomText {
+    background-color: #32293F;
+    color: white;
+    padding: 1em;
+}
+
+    .BottomText .LocalizationIcon {
+        color: black;
+        width:20px;
+        height:15px;
+    }
+
+
+
+
+
+.grid-item:nth-child(2n) .UserCardStyle .BottomText {
+    background-color: #6BC79D;
+}
+
+    .grid-item:nth-child(2n) .UserCardStyle .BottomText svg path {
+        fill: black;
+    }

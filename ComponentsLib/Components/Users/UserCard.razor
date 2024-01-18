@@ -1,31 +1,44 @@
 ﻿@namespace ComponentsLib
 @inject IServiceManager ServiceManager
 
-<div class="bg-white rounded-1 text-center" style="max-width:200px; cursor: grab; line-height:1">
+<div class="rounded-2 text-center UserCardStyle" draggable="true" @oncontextmenu="HandleContextMenu" @oncontextmenu:preventDefault="true">
     @if (ModelUser is not null)
     {
 
-        <div style="position:absolute"> 
-            <CptIconGroupShower ParamChoosenGroup="ModelUser.UserGroup"/>
+        <div style="position:absolute ; padding : 5px;">
+            <CptIconGroupShower ParamChoosenGroup="ModelUser.UserGroup" />
         </div>
 
 
-        <div class="px-4 pt-3 pb-1">
+        <div class=" px-4 pt-3 pb-1 NS" >
             <div>
-                <img class="round-image" src="@ModelUser.ProfilePictureLocation" />
+                <img class="round-image NS" src="@ModelUser.ProfilePictureLocation" />
             </div>
 
-            <div>
-                @ModelUser.Name
+            <div class="my-2">
+                <div>
+                    @ModelUser.Name
+                </div>
+
+                <div>
+                    @ModelUser.Surname
+                </div>
             </div>
 
-            <div>
-                @ModelUser.Surname
-            </div>
+           
 
         </div>
-        <div class="bg-dark text-white p-2">
-            @ModelUser.Location
+        <div class="BottomText " >
+
+            <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 8.3125C12.3438 7.5 12.5 6.90625 12.5 6.5C12.5 4.03125 10.4688 2 8 2C5.5 2 3.5
+                        4.03125 3.5 6.5C3.5 6.90625 3.625 7.5 3.96875 8.3125C4.28125 9.0625 4.75 9.9375
+                        5.28125 10.8125C6.1875 12.25 7.21875 13.625 8 14.625C8.75 13.625 9.78125 12.25
+                        10.6875 10.8125C11.2188 9.9375 11.6875 9.0625 12 8.3125ZM8.71875 16.125C8.34375 
+                        16.5938 7.625 16.5938 7.25 16.125C5.65625 14.0938 2 9.25 2 6.5C2 3.1875 4.6875
+                        0.5 8 0.5C11.3125 0.5 14 3.1875 14 6.5C14 9.25 10.3438 14.0937 8.71875 16.125Z" fill="#6BC79D" />
+            </svg>
+          @*   <img class="LocalizationIcon" src="/images/UserCartIcon/LocalizationIcon.svg" />  *@  @ModelUser.Location
         </div>
 
     }
@@ -38,6 +51,20 @@
 
 </div>
 
+@if (showContextMenu && ModelUser is not null)
+{
+    <div class="bg-white rounded p-2" style="position:absolute; top:@mouseY px; left:@mouseX px; ">
+        <div class="form-check ">
+            <input class="form-check-input " type="checkbox" id="UserLocked @ModelUser.Id" value="@IsUserLocked" @onchange="(e)=> OnChangeCheckBoxOrder(e)" checked="@IsUserLocked">
+            <label class="form-check-label" for="UserLocked @ModelUser.Id">
+                Zablokuj pozycję użytkownika
+            </label>
+        </div>
+    </div>
+
+}
+
+
 
 
 @code {
@@ -45,7 +72,39 @@
     private Guid UserId { get; set; } = Guid.Empty;
 
 
+    private bool IsUserLocked { get; set; }
+
+    private bool showContextMenu;
+
     public ModelUser? ModelUser { get; set; }
+
+    private double mouseX;
+    private double mouseY;
+
+    private void HandleContextMenu(MouseEventArgs e)
+    {
+        if (showContextMenu)
+        {
+            showContextMenu = false;
+            return;
+        }
+
+        mouseX = e.ClientX;
+        mouseY = e.ClientY;
+        showContextMenu = true;
+    }
+
+    private void OnChangeCheckBoxOrder( ChangeEventArgs e)
+    {
+        bool value = Convert.ToBoolean(e.Value);
+        IsUserLocked = value;
+
+        if (ModelUser is not null)
+        {
+            ModelUser.IsPositionLocked = IsUserLocked;
+        }
+
+    }
 
 
     protected override async Task OnParametersSetAsync()
@@ -61,6 +120,7 @@
                 if (GetUserResult.IsSuccess && GetUserResult.Value is not null)
                 {
                     ModelUser = GetUserResult.Value;
+                    IsUserLocked = ModelUser.IsPositionLocked;
                 }
 
             }

@@ -20,4 +20,17 @@
     <ProjectReference Include="..\PagesLib\PagesLib.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Scripts\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\images\GroupsSvgIcons\G0.svg" />
+    <None Include="wwwroot\images\GroupsSvgIcons\G1.svg" />
+    <None Include="wwwroot\images\GroupsSvgIcons\G2.svg" />
+    <None Include="wwwroot\images\GroupsSvgIcons\G3.svg" />
+    <None Include="wwwroot\images\GroupsSvgIcons\G4.svg" />
+    <None Include="wwwroot\images\GroupsSvgIcons\G5.svg" />
+  </ItemGroup>
+
 </Project>
