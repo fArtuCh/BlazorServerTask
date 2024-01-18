@@ -15,7 +15,10 @@ public interface IUserService
 
 
     public Result<List<Guid>> GetSelectedUsers();
-    public Result<bool> SelectUser(Guid UserId);
+    public Task<bool> SelectUser(Guid UserId);
+
+    public Task<Result<bool>> ChangeOrder(Guid UserId);
+
     public Task ClearUserSelection();
     public void EnableSelection();
 }

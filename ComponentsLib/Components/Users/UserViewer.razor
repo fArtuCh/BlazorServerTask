@@ -8,21 +8,12 @@
     @foreach (var user in ParamUsers)
     {
         var selectedUsers = ServiceManager.UserServiceLS.GetSelectedUsers().Value;
-
         string UserSelectionClass = selectedUsers.Contains(user.Id) ? "grid-item-selected" : "";
 
         <div class="grid-item @UserSelectionClass" @ondragstart="()=>OnUserDragStart(user.Id)" @onclick="()=>OnClickUserSelection(user.Id)">
             <UserCard ParamUserId="user.Id" />
         </div>
-
     }
-
-    @*     @if (ParamUsers.Count ==0)
-    {
-    <div class="grid-item w-100 ">
-
-    </div>
-    } *@
 
 </div>
 
@@ -60,7 +51,6 @@
     public void OnClickUserSelection(Guid UserId)
     {
         ServiceManager.UserServiceLS.SelectUser(UserId);
-
     }
 
 
@@ -76,10 +66,12 @@
         await InvokeAsync(StateHasChanged);
     }
 
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _courier.Subscribe<NotificationShiftKeyRealeased>(HandleUserGroupChange);
+
     }
 
     public void Dispose()

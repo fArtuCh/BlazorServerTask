@@ -6,28 +6,29 @@ namespace LocalServices;
 public class UserService : IUserService
 {
     private readonly ICourier _courier;
-
+    private readonly IDragAndDropService _dragDropService;
     public List<ModelUser> AllUsers { get; set; } = new();
 
     public List<Guid> SelectedUsers { get; set; } = new();
     private readonly int dummyRealLifeDelay = 50; // Some Services functions could take data from DB
-    private  bool isShiftPressed = false;
+    private bool isShiftPressed = false;
 
-    private Dictionary<EnumUserGroup,List<Guid>> orderOfUsers { get; set; } = new();
+    private Dictionary<EnumUserGroup, List<Guid>> orderOfUsers { get; set; } = new();
 
-    public UserService(ICourier courier)
+    public UserService(ICourier courier, IDragAndDropService dragAndDropService)
     {
         _courier = courier;
+        _dragDropService = dragAndDropService;
         AllUsers = Helper.User.GenerateUsers();
     }
 
 
 
-    private List<ModelUser> SortUsersByGuidOrder(List<ModelUser> users, EnumUserGroup group )
+    private List<ModelUser> SortUsersByGuidOrder(List<ModelUser> users, EnumUserGroup group)
     {
         if (!orderOfUsers.ContainsKey(group))
         {
-            var IdsInOrder = users.Select(n=>n.Id).ToList();
+            var IdsInOrder = users.Select(n => n.Id).ToList();
             orderOfUsers[group] = IdsInOrder;
             return users;
         }
@@ -59,17 +60,78 @@ public class UserService : IUserService
     }
 
 
-    public void  EnableSelection()
+    public void EnableSelection()
     {
         isShiftPressed = true;
     }
 
 
-    public Result<bool> SelectUser(Guid UserId)
+    private bool ChangeOrderOfUsers(Guid UserId)
     {
-        if(!isShiftPressed)
+        ModelUser? ChoosenUser = AllUsers.FirstOrDefault(n => n.Id == UserId);
+
+        if (ChoosenUser == null || ChoosenUser.IsPositionLocked)
         {
             return false;
+        }
+
+        if (!orderOfUsers.ContainsKey(ChoosenUser.UserGroup))
+        {
+            var result = AllUsers.Where(n => n.UserGroup == ChoosenUser.UserGroup).ToList();
+
+            //Move user to front 
+            var userToMove = result.FirstOrDefault(u => u.Id == UserId);
+
+            // If found, move the user to the front
+            if (userToMove != null)
+            {
+                result.Remove(userToMove);
+                result.Insert(0, userToMove);
+            }
+
+
+            var IdsInOrder = result.Select(n => n.Id).ToList();
+            orderOfUsers[ChoosenUser.UserGroup] = IdsInOrder;
+            return true;
+        }
+        else
+        {
+            var order = orderOfUsers[ChoosenUser.UserGroup].ToList();
+            if (order.Contains(UserId))
+            {
+                // Remove the GUID from its current position
+                order.Remove(UserId);
+                // Insert the GUID at the front of the list
+                order.Insert(0, UserId);
+                orderOfUsers[ChoosenUser.UserGroup] = order;
+                return true;
+            }
+
+        }
+
+        return false;
+    }
+
+    public async Task<Result<bool>> ChangeOrder(Guid UserId)
+    {
+        if (!isShiftPressed)
+        {
+            if (ChangeOrderOfUsers(UserId))
+            {
+                await _courier.Publish(new NotificationOrderOfUserChanged()); // It is used only for refresh not to worry
+            }
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public  Task<bool> SelectUser(Guid UserId)
+    {
+        if (!isShiftPressed)
+        {
+            return Task.FromResult(false);
         }
 
         if (SelectedUsers.Contains(UserId))
@@ -81,26 +143,23 @@ public class UserService : IUserService
             SelectedUsers.Add(UserId);
         }
 
-        return true;
+        return Task.FromResult(false);
     }
 
 
-
-    public  Result<List<Guid>> GetSelectedUsers()
-    {    
-        return SelectedUsers;
-    }
-
-
+    public Result<List<Guid>> GetSelectedUsers() => SelectedUsers;
 
     public async Task<Result<List<ModelUser>>> GetUsersBasedOnGroup(EnumUserGroup enumUserGroup)
     {
         await Task.Delay(dummyRealLifeDelay);
 
-        var result =  AllUsers.Where(n => n.UserGroup == enumUserGroup).ToList();
+        var result = AllUsers.Where(n => n.UserGroup == enumUserGroup).ToList();
 
         return SortUsersByGuidOrder(result, enumUserGroup);
     }
+
+
+
 
 
 
@@ -120,28 +179,27 @@ public class UserService : IUserService
             return Result<bool>.Error;
         }
 
-        if (enumUserGroup == ChoosenUser.UserGroup)
+        if (enumUserGroup != ChoosenUser.UserGroup)
         {
-            return Result<bool>.Error;
+            //MOVE SINGLE USER
+            await ChangeGroupForUser(enumUserGroup, ChoosenUser);
         }
-
-
-        //SelectedUsers
-
-        await ChangeGroupForUser(enumUserGroup, ChoosenUser);
-
-        if(SelectedUsers.Count > 0)
+       
+        // MOVE MULTIPLE USERS
+        if (SelectedUsers.Count > 0)
         {
             foreach (var user in SelectedUsers)
             {
                 ModelUser? ChoosenUserV2 = AllUsers.FirstOrDefault(n => n.Id == user);
-                if (ChoosenUserV2 != null && enumUserGroup != ChoosenUserV2.UserGroup)
+                if (ChoosenUserV2 is not null && enumUserGroup != ChoosenUserV2.UserGroup)
                 {
                     await ChangeGroupForUser(enumUserGroup, ChoosenUserV2);
                 }
             }
             await ClearUserSelection();
         }
+
+
 
         return true;
     }
@@ -151,9 +209,9 @@ public class UserService : IUserService
     private async Task ChangeGroupForUser(EnumUserGroup? enumUserGroup, ModelUser ChoosenUser)
     {
 
-        if(ChoosenUser.IsPositionLocked)
+        if (ChoosenUser.IsPositionLocked)
         {
-            return;
+            return; // LOCKED USERS ARE NOT ALLOWED TO CHANGE GROUP
         }
 
         var PreviousGroup = ChoosenUser.UserGroup;
@@ -165,8 +223,34 @@ public class UserService : IUserService
             PreviousGroup = PreviousGroup
         };
 
+        RemoveUserFromOrderInGroupAndAddToOtherOne(ChoosenUser.Id, PreviousGroup, ChoosenUser.UserGroup);
+
         await _courier.Publish(notificationGroupChange);
     }
+
+    private void RemoveUserFromOrderInGroupAndAddToOtherOne(Guid user, EnumUserGroup StartGroup, EnumUserGroup EndGroup)
+    {
+        //OLD GROUP
+        if(orderOfUsers.ContainsKey(StartGroup))
+        {
+            orderOfUsers[StartGroup].Remove(user);
+        }
+        else
+        {
+            orderOfUsers[StartGroup] = new() {  };
+        }
+
+        //NewGroup 
+        if (orderOfUsers.ContainsKey(EndGroup))
+        {
+            orderOfUsers[EndGroup].Add(user);
+        }
+        else
+        {
+            orderOfUsers[EndGroup] = new() { user };
+        }
+    }
+
 
     public async Task<Result<ModelUser>> GetSingleUserById(Guid UserId)
     {
@@ -183,7 +267,7 @@ public class UserService : IUserService
     public void ChangeLockOnUser(Guid UserId, bool IsLocked)
     {
         ModelUser? ChoosenUserV2 = AllUsers.FirstOrDefault(n => n.Id == UserId);
-        if (ChoosenUserV2 != null )
+        if (ChoosenUserV2 != null)
         {
             ChoosenUserV2.IsPositionLocked = IsLocked;
         }

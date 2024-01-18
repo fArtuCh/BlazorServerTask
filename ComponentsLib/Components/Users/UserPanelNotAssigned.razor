@@ -31,14 +31,18 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        var GetUsersResult = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(EnumUserGroup.None);
+        await DownloadData();
+    }
 
+
+    protected  async Task DownloadData()
+    {
+        var GetUsersResult = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(EnumUserGroup.None);
         if (GetUsersResult.IsSuccess)
         {
             Users = GetUsersResult.Value;
         }
     }
-
 
     private async Task HandleUserGroupChange(NotificationGroupChange notify, CancellationToken cancellationToken)
     {
@@ -55,15 +59,23 @@
 
     }
 
+    private async Task HandleUserOrder(NotificationOrderOfUserChanged notify, CancellationToken cancellationToken)
+    {
+        await DownloadData();
+        await InvokeAsync(StateHasChanged);
+    }
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _courier.Subscribe<NotificationGroupChange>(HandleUserGroupChange);
+        _courier.Subscribe<NotificationOrderOfUserChanged>(HandleUserOrder);
     }
 
     public void Dispose()
     {
         _courier.UnSubscribe<NotificationGroupChange>(HandleUserGroupChange);
+        _courier.UnSubscribe<NotificationOrderOfUserChanged>(HandleUserOrder);
     }
 
 

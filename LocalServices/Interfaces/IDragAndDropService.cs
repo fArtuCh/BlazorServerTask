@@ -9,4 +9,11 @@ public interface IDragAndDropService
 
     EnumUserGroup? LastDragedPannel { get; set; }
 
+
+    // FAILED ATTEMPT:
+    //ModelUser? GetCurrentUserDragedOver();
+
+    //void SetCurrentUserDraged(ModelUser? currentUserDraged, bool IsEntry);
+
+
 }

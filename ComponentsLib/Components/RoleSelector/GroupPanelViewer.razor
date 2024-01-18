@@ -99,7 +99,7 @@
         {
             foreach (var user in ServiceManager.DragDropLS.CurrentUsersBeingDragged)
             {
-               await ServiceManager.UserServiceLS.MoveUserToGivenGroup(user, enumUserGroup);
+                await ServiceManager.UserServiceLS.MoveUserToGivenGroup(user, enumUserGroup);
             }
 
             ServiceManager.DragDropLS.CurrentUsersBeingDragged.Clear();
@@ -113,20 +113,23 @@
 
     protected override async Task OnInitializedAsync()
     {
-
         IsLoading = true;
         StateHasChanged();
 
+        await DownloadData();
+        IsLoading = false;
+    }
+
+    private async Task DownloadData()
+    {
         var result = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(CurrentGroupSelected);
 
         if (result.IsSuccess)
         {
             CurrentUsers = result.Value;
         }
-
-        IsLoading = false;
-
     }
+
 
     private async Task HandleUserGroupChange(NotificationGroupChange notify, CancellationToken cancellationToken)
     {
@@ -143,15 +146,24 @@
 
     }
 
+    private async Task HandleUserOrder(NotificationOrderOfUserChanged notify, CancellationToken cancellationToken)
+    {
+        await DownloadData();
+        await InvokeAsync(StateHasChanged);
+    }
+
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _courier.Subscribe<NotificationGroupChange>(HandleUserGroupChange);
+        _courier.Subscribe<NotificationOrderOfUserChanged>(HandleUserOrder);
     }
 
     public void Dispose()
     {
         _courier.UnSubscribe<NotificationGroupChange>(HandleUserGroupChange);
+        _courier.UnSubscribe<NotificationOrderOfUserChanged>(HandleUserOrder);
     }
 
 
