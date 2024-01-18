@@ -1,5 +1,6 @@
 ﻿@namespace ComponentsLib
 
+@* COMPONENT THAT DISPLAYS GROUP ICONS *@
 
 @if (ParamIsWhiteColor)
 {
@@ -107,12 +108,7 @@ else
 }
 
 
-
-
-
 @code {
     [Parameter] public EnumUserGroup ParamChoosenGroup { get; set; }
-
     [Parameter] public bool ParamIsWhiteColor { get; set; } = false;
-
 }

@@ -3,6 +3,9 @@
 @implements IDisposable
 @inject ICourier _courier
 
+
+@* COMPONENT THAT DISPLAYS ALL CARDS OF USERS OF GIVEN GROUP IN GRID *@
+
 <div class="LocalGrid p-2 " @ondragend="()=>OnDragEnd()" @ondragenter="()=>OnPanelEnter()" @ondragleave="OnPanelLeave">
 
     @foreach (var user in ParamUsers)
@@ -19,9 +22,7 @@
 
 
 @code {
-
     [Parameter] public List<ModelUser> ParamUsers { get; set; } = new();
-
     [Parameter] public EnumUserGroup ParamUserGroupType { get; set; } = EnumUserGroup.Grupa1;
 
 
@@ -35,7 +36,6 @@
         {
             await ServiceManager.UserServiceLS.MoveUserToGivenGroup(userId, CurrentGroup);
         }
-
     }
 
     public void OnPanelEnter()
@@ -46,6 +46,7 @@
     public void OnPanelLeave()
     {
         //  ServiceManager.DragDropLS.LastDragedPannel = null ;
+        // IT WAS INVOKING EVENT IN CART ALSO REMOVED FOR SIMPLICITY, TO DO 
     }
 
     public void OnClickUserSelection(Guid UserId)
@@ -53,25 +54,21 @@
         ServiceManager.UserServiceLS.SelectUser(UserId);
     }
 
-
     public void OnUserDragStart(Guid UserId)
     {
         ServiceManager.DragDropLS.CurrentUsersBeingDragged.Clear();
         ServiceManager.DragDropLS.CurrentUsersBeingDragged.Add(UserId);
     }
 
-
     private async Task HandleUserGroupChange(NotificationShiftKeyRealeased notify, CancellationToken cancellationToken)
     {
         await InvokeAsync(StateHasChanged);
     }
 
-
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _courier.Subscribe<NotificationShiftKeyRealeased>(HandleUserGroupChange);
-
     }
 
     public void Dispose()

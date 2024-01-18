@@ -2,7 +2,7 @@
 
 
 
-.UserCardStyle {
+.LocalUserCardStyle {
     max-width: 200px;
     cursor: grab;
     line-height: 20px;
@@ -14,30 +14,30 @@
     background-color: white;
 }
 
-.grid-item-selected .UserCardStyle {
+.grid-item-selected .LocalUserCardStyle {
     background-color: #fbf499;
 }
 
-.BottomText {
+.LocalBottomText {
     background-color: #32293F;
     color: white;
     padding: 1em;
 }
 
-    .BottomText .LocalizationIcon {
+    .LocalBottomText .LocalizationIcon {
         color: black;
-        width:20px;
-        height:15px;
+        width: 20px;
+        height: 15px;
     }
 
 
 
 
 
-.grid-item:nth-child(2n) .UserCardStyle .BottomText {
+.grid-item:nth-child(2n) .LocalUserCardStyle .LocalBottomText {
     background-color: #6BC79D;
 }
 
-    .grid-item:nth-child(2n) .UserCardStyle .BottomText svg path {
+    .grid-item:nth-child(2n) .LocalUserCardStyle .LocalBottomText svg path {
         fill: black;
     }

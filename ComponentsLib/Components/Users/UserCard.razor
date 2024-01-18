@@ -1,16 +1,16 @@
 ﻿@namespace ComponentsLib
 @inject IServiceManager ServiceManager
 
+@* COMPONENT THAT SHOW USER CARD *@
+
+
 @if (ModelUser is not null)
 {
-    <div class="rounded-2 text-center UserCardStyle" draggable="true" @onclick="()=>OnClickUserChangeOrder(ModelUser.Id)" @oncontextmenu="HandleContextMenu" @oncontextmenu:preventDefault="true">
-
+    <div class="rounded-2 text-center LocalUserCardStyle" draggable="true" @onclick="()=>OnClickUserChangeOrder(ModelUser.Id)" @oncontextmenu="HandleContextMenu" @oncontextmenu:preventDefault="true">
 
         <div style="position:absolute ; padding : 5px;">
             <CptIconGroupShower ParamChoosenGroup="ModelUser.UserGroup" />
         </div>
-
-
         <div class=" px-4 pt-3 pb-1 NS">
             <div>
                 <img class="round-image NS" src="@ModelUser.ProfilePictureLocation" />
@@ -26,10 +26,8 @@
                 </div>
             </div>
 
-
-
         </div>
-        <div class="BottomText ">
+        <div class="LocalBottomText ">
 
             <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M12 8.3125C12.3438 7.5 12.5 6.90625 12.5 6.5C12.5 4.03125 10.4688 2 8 2C5.5 2 3.5
@@ -41,9 +39,6 @@
             </svg>
             @ModelUser.Location
         </div>
-
-
-
     </div>
 }
 else
@@ -119,20 +114,6 @@ else
 
         Console.WriteLine($"End {ModelUser.Name}");
     }
-
-    // private void OnUserEnter()
-    // {
-    //     if (ModelUser is null) { return; }
-    //     ServiceManager.DragDropLS.SetCurrentUserDraged(ModelUser, true);
-    //     Console.WriteLine($"Enter {ModelUser.Name}");
-    // }
-
-    // private void OnUserLeave()
-    // {
-    //     if (ModelUser is null) { return; }
-    //     ServiceManager.DragDropLS.SetCurrentUserDraged(ModelUser, false);
-    //     Console.WriteLine($"Leave {ModelUser.Name}");
-    // }
 
     protected override async Task OnParametersSetAsync()
     {

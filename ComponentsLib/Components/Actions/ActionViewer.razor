@@ -2,11 +2,15 @@
 @inject ICourier _courier
 @implements IDisposable
 
+@* COMPONENT THAT SHOW USER LOGS ON CHANGING GROUP *@
 
+
+@* Separtor *@
 <div class="mx-2 text-white my-2 mb-4" style="border-top:2px solid; opacity:0.6"></div>
 
-<div class="scrollable-div">
-    <ul class="rounded-badges mx-2">
+@* Actual List *@
+<div class="LocalScrollable-div">
+    <ul class="LocalRounded-badges  mx-2">
         @foreach (var message in ActionMessages)
         {
             var ExtraEffect = message.IsNowAdded ? "NewlyAdded" : "" ;
@@ -16,26 +20,18 @@
                 <span>@message.Message</span>
             </li>
         }
-
     </ul>
-
 </div>
 
 
-
 @code {
-
-
     private List<ActionMessage> ActionMessages { get; set; } = new();
 
     private sealed class ActionMessage
     {
         public EnumUserGroup enumUserGroup { get; set; }
-
         public string Message { get; set; } = string.Empty;
-
         public bool IsNowAdded { get; set; } = false;
-
     }
 
 
@@ -50,6 +46,7 @@
 
     private void InitExampleActionMessages()
     {
+        // LOAD TEMPORARY BLOATWARE
         var generatedUser = Helper.User.GenerateUsers();
         foreach (var item in generatedUser)
         {
@@ -60,16 +57,16 @@
 
     private async Task HandleUserGroupChange(NotificationGroupChange notify, CancellationToken cancellationToken)
     {
+        // Add new messages on event
+
         if (notify.PreviousGroup != EnumUserGroup.None)
         {
-
             ActionMessage actionMessage2 = new ActionMessage()
                 {
                     enumUserGroup = notify.PreviousGroup,
                     Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został usunięty z  {notify.PreviousGroup} ",
-                    IsNowAdded = true,
+                    IsNowAdded = true, // gives animation
                 };
-
             ActionMessages.Add(actionMessage2);
         }
 
@@ -79,29 +76,24 @@
                 {
                     enumUserGroup = notify.Data.UserGroup,
                     Message = $"Użytkownik {notify.Data.Name} {notify.Data.Surname} został przeniesiony do {notify.Data.UserGroup.GetDescription()} ",
-                    IsNowAdded = true,
+                    IsNowAdded = true,// gives animation
                 };
-
             ActionMessages.Add(actionMessage);
-        }
-
+        }     
         
         await InvokeAsync(StateHasChanged);
-
     }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
         _courier.Subscribe<NotificationGroupChange>(HandleUserGroupChange);
-
-        InitExampleActionMessages();
+        InitExampleActionMessages(); // Load something
     }
 
     public void Dispose()
     {
         _courier.UnSubscribe<NotificationGroupChange>(HandleUserGroupChange);
     }
-
 
 }

@@ -10772,7 +10772,10 @@ textarea.form-control-lg {
 }
 :root {
   /*    --color1: #C33764;
-      --color2: #1D2671;*/
+      --color2: #1D2671;
+
+      THERE SHOULD BE MORE COLORS AND ALL COLORS SHOULD BE TAKEN FROM HERE < BUT NO PALLET WAS GIVEN SO FINDING ALL COLORS WOULD BE TOO TIME CONSUMING.
+  */
 }
 
 .transparent-blur {
@@ -10784,6 +10787,7 @@ body {
   font-family: Verdana;
 }
 
+/*Possible custom buttons for application*/
 img {
   display: inline-block;
 }
@@ -10795,24 +10799,28 @@ img {
   object-fit: cover; /* This ensures the image covers the area without stretching */
 }
 
-/*@import "../scss/Layout.scss";*/
-.not-selectable, .Ns, .NS {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+.CsLayoutFlexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.CsLayoutFlexGrowing {
+  display: flex;
+  flex-grow: 1;
 }
 
 .UserViewerContainer {
   flex-grow: 1;
   display: flex;
   height: 100%;
-  /*    :hover{
-          border: solid 0.5px;
-          border-color:white;
+}
 
-      }*/
+.not-selectable, .Ns, .NS {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 #blazor-error-ui {

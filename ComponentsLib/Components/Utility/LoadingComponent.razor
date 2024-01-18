@@ -1,5 +1,7 @@
 ﻿@namespace ComponentsLib
 
+@* COMPONENT THAT HIDDES BODY WHILE LOADING IS PRESENT *@
+
 @if (ParamIsLoading)
 {
 
@@ -8,7 +10,6 @@
             <span class="visually-hidden">Loading...</span>
         </div>
     </div>
-
 }
 else
 {
@@ -20,12 +21,8 @@ else
 
 @code {
     [Parameter]public bool ParamIsLoading { get; set; } = true;
-
-
     [Parameter] public bool ParamIsSpinnerCenter { get; set; } = true;
-
     [Parameter] public RenderFragment? ChildContent { get; set; }
 
     private string SpinnerCenterClass => (ParamIsSpinnerCenter) ? "text-center" : "text-start";
-
 }

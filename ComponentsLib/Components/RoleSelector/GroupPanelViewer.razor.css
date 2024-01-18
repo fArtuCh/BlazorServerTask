@@ -25,11 +25,11 @@
     }
 }
 
-.ButtonMenu {
+.LocalButtonMenu {
     min-height: 40px;
 }
 
-.ButtonMenuActive {
+.LocalButtonMenuActive {
     min-height: 60px;
     animation: bounce 1s ease; /* Apply the bounce animation */
 }

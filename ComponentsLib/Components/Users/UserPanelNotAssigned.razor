@@ -3,6 +3,8 @@
 @inject ICourier _courier
 @inject IServiceManager ServiceManager
 
+@* COMPONENT THAT MANAGES NOT ASSIGNED USERS AND LOGS FOR USERS< AND COMBINES THEM INTO SINGLE COMPONENT *@
+
 <div class=" rounded h-100 transparent-blur d-flex" style="flex-direction:column">
 
     <div class="d-flex justify-content-between px-3 pt-3 mb-5">
@@ -28,13 +30,6 @@
 @code {
     public List<ModelUser> Users { get; set; } = new();
 
-
-    protected override async Task OnParametersSetAsync()
-    {
-        await DownloadData();
-    }
-
-
     protected  async Task DownloadData()
     {
         var GetUsersResult = await ServiceManager.UserServiceLS.GetUsersBasedOnGroup(EnumUserGroup.None);
@@ -56,14 +51,16 @@
             Users.Add(notify.Data);
             await InvokeAsync(StateHasChanged);
         }
-
     }
 
     private async Task HandleUserOrder(NotificationOrderOfUserChanged notify, CancellationToken cancellationToken)
     {
+        //Refresh On order Change
         await DownloadData();
         await InvokeAsync(StateHasChanged);
     }
+
+    protected override async Task OnParametersSetAsync() => await DownloadData();
 
     protected override void OnInitialized()
     {

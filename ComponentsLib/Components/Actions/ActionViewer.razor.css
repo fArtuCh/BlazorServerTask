@@ -1,5 +1,5 @@
 ﻿
-.scrollable-div {
+.LocalScrollable-div {
     max-height: 400px; 
     overflow-y: auto; 
 }
@@ -18,21 +18,21 @@
 }
 
 /* Apply animation to elements with the NewlyAdded class */
-.rounded-badges li.NewlyAdded {
+.LocalRounded-badges li.NewlyAdded {
     animation: fadeInScale 0.5s ease-in-out;
 }
 
 
 
-.rounded-badges {
+.LocalRounded-badges {
     list-style-type: none;
     padding: 0;
-    display: flex; 
-    flex-direction: column-reverse; 
+    display: flex;
+    flex-direction: column-reverse;
 }
 
-    .rounded-badges li {
-        background-color: rgba(255, 255, 255, 0.4); 
+    .LocalRounded-badges li {
+        background-color: rgba(255, 255, 255, 0.4);
         color: white;
         padding: 0.5em 1em;
         margin-bottom: 10px;
@@ -41,6 +41,6 @@
         width: calc(100% - 2em);
     }
 
-        .rounded-badges li:nth-child(2n) {
+        .LocalRounded-badges li:nth-child(2n) {
             background-color: rgba(255, 255, 255, 0.3);
         }

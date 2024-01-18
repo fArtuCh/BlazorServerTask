@@ -1,14 +1,14 @@
 ﻿
 :root {
 /*    --color1: #C33764;
-    --color2: #1D2671;*/
-}
+    --color2: #1D2671;
 
+    THERE SHOULD BE MORE COLORS AND ALL COLORS SHOULD BE TAKEN FROM HERE < BUT NO PALLET WAS GIVEN SO FINDING ALL COLORS WOULD BE TOO TIME CONSUMING.
+*/
+}
 
 
 .transparent-blur {
     background-image: radial-gradient(at top left, rgba(255, 255, 255, 0.5),  rgba(182, 255, 0,0));
-    //background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
     backdrop-filter: blur(10px); 
-    //border: 1px solid rgba(255, 255, 255, 0.3); 
 }

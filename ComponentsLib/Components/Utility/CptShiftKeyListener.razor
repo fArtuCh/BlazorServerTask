@@ -1,9 +1,9 @@
 ﻿@namespace ComponentsLib
-
 @inject IServiceManager ServiceManager
 @inject IJSRuntime JSRuntime
 @implements IDisposable
 
+@* COMPONENT THAT CAPTURES SHIFT KEYS AND PROPAGATES THEM TO SERVICE *@
 
 
 @code {
@@ -33,7 +33,6 @@
         {
             ServiceManager.UserServiceLS.ClearUserSelection();
         }
-
         StateHasChanged();
     }
 

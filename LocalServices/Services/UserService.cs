@@ -7,7 +7,7 @@ public class UserService : IUserService
 {
     private readonly ICourier _courier;
     private readonly IDragAndDropService _dragDropService;
-    public List<ModelUser> AllUsers { get; set; } = new();
+    public List<ModelUser> AllUsers { get; set; } = new(); // TEMPORARY LOCAL STORAGE OF USERS
 
     public List<Guid> SelectedUsers { get; set; } = new();
     private readonly int dummyRealLifeDelay = 50; // Some Services functions could take data from DB
@@ -21,8 +21,6 @@ public class UserService : IUserService
         _dragDropService = dragAndDropService;
         AllUsers = Helper.User.GenerateUsers();
     }
-
-
 
     private List<ModelUser> SortUsersByGuidOrder(List<ModelUser> users, EnumUserGroup group)
     {
@@ -47,9 +45,6 @@ public class UserService : IUserService
             return int.MaxValue; // Users not in the GUID list are placed at the end
         }).ToList();
     }
-
-
-
 
 
     public async Task ClearUserSelection()
@@ -158,11 +153,6 @@ public class UserService : IUserService
         return SortUsersByGuidOrder(result, enumUserGroup);
     }
 
-
-
-
-
-
     public async Task<Result<bool>> MoveUserToGivenGroup(Guid UserId, EnumUserGroup? enumUserGroup)
     {
         if (enumUserGroup is null)
@@ -199,16 +189,11 @@ public class UserService : IUserService
             await ClearUserSelection();
         }
 
-
-
         return true;
     }
 
-
-
     private async Task ChangeGroupForUser(EnumUserGroup? enumUserGroup, ModelUser ChoosenUser)
     {
-
         if (ChoosenUser.IsPositionLocked)
         {
             return; // LOCKED USERS ARE NOT ALLOWED TO CHANGE GROUP
@@ -224,7 +209,6 @@ public class UserService : IUserService
         };
 
         RemoveUserFromOrderInGroupAndAddToOtherOne(ChoosenUser.Id, PreviousGroup, ChoosenUser.UserGroup);
-
         await _courier.Publish(notificationGroupChange);
     }
 
@@ -261,7 +245,6 @@ public class UserService : IUserService
         if (ChoosenUser == null) { return Result<ModelUser>.Error; }
 
         return ChoosenUser;
-
     }
 
     public void ChangeLockOnUser(Guid UserId, bool IsLocked)

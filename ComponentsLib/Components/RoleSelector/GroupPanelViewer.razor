@@ -3,9 +3,9 @@
 @inject ICourier _courier
 @inject IServiceManager ServiceManager
 
+@* COMPONENT THAT MANAGES SHOWING DIFFERENT GROUPS *@
 
-
-<div class="rounded  h-100 transparent-blur d-flex" style="flex-direction:column">
+<div class="rounded  h-100 transparent-blur CsLayoutFlexColumn">
 
     <div class="py-2 px-3 LocalGridForTabs">
 
@@ -17,7 +17,7 @@
                 continue;
             }
             <div>
-                <button class="btn btn-light w-100 ButtonMenu @GroupSelectedButtonStyle(value)"
+                <button class="btn btn-light w-100 LocalButtonMenu @GroupSelectedButtonStyle(value)"
                         @ondragenter="()=>OnUserDragEnter(value)"
                         @ondragend="()=>OnUserDragEnd(value)"
                         @onclick="()=>OnClickChangeGroup(value)">
@@ -37,15 +37,11 @@
         }
 
     </div>
-    <div class="d-flex" style="flex-grow:1">
-
+    <div class="CsLayoutFlexGrowing px-3" >
         <LoadingComponent ParamIsLoading="IsLoading">
             <UserViewer ParamUsers="CurrentUsers" ParamUserGroupType="@CurrentGroupSelected" />
         </LoadingComponent>
-
     </div>
-
-
 
 </div>
 
@@ -56,7 +52,7 @@
     public List<ModelUser> CurrentUsers { get; set; } = new();
 
 
-    private string GroupSelectedButtonStyle(EnumUserGroup enumUserGroup) => enumUserGroup == CurrentGroupSelected ? "ButtonMenuActive" : "";
+    private string GroupSelectedButtonStyle(EnumUserGroup enumUserGroup) => enumUserGroup == CurrentGroupSelected ? "LocalButtonMenuActive" : "";
 
     public bool IsLoading { get; set; }
 

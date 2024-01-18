@@ -2,6 +2,7 @@
 
 namespace LocalServices;
 
+// Service manages All user related stuff
 public interface IUserService
 {
     public Task<Result<List<ModelUser>>> GetUsersBasedOnGroup(EnumUserGroup enumUserGroup);

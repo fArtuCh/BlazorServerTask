@@ -1,9 +1,5 @@
 ﻿using Domain;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace LocalServices;
 
@@ -25,13 +21,7 @@ public static class Helper
 
             return users;
         }
-
-
     }
-
-
-
-
 
 
 }

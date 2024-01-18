@@ -3,9 +3,8 @@
 @import "../scss/ColorsAndBackgrounds.scss";
 @import "../scss/FontsHeadersAndLists.scss";
 @import "../scss/Buttons.scss";
-@import "../scss/Tables.scss";
 @import "../scss/Pictures.scss";
-/*@import "../scss/Layout.scss";*/
+@import "../scss/Layout.scss";
 
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
@@ -22,20 +21,7 @@
     @include MYMIXnotSelectable;
 }
 
-.UserViewerContainer{
 
-    @extend .m-3;
-    flex-grow:1;
-    display:flex;
-    height:100%;
-
-/*    :hover{
-        border: solid 0.5px;
-        border-color:white;
-
-    }*/
-
-}
 
 #blazor-error-ui {
     background: lightyellow;
